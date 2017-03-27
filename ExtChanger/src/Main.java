@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
@@ -9,6 +11,12 @@ public class Main {
     private JButton fileChooser;
     private JTextField extensionTextField;
     private JPanel main;
+    private JTextField getPath;
+    private JButton change;
+    private JLabel word1;
+    private JLabel word2;
+    File file;
+    String ext;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Zmień rozszerzenie Twojego pliku");
@@ -16,6 +24,8 @@ public class Main {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        String ext;
+        File file;
     }
 
     public Main() {
@@ -23,9 +33,22 @@ public class Main {
             JFileChooser fileChooser = new JFileChooser(new File("System.getProperty(\"user.home\")"));
             int result = fileChooser.showOpenDialog(Main.this.main);
             if (result == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                String ext = extensionTextField.getText();
+                getPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                file = fileChooser.getSelectedFile();
+                ext = extensionTextField.getText().trim();   //jeśli z jFileChoosera
+
+            }
+        });
+        change.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                File temp = new File(getPath.getText());
+                if(temp.isFile()){   //jeśli wpisana ręcznie
+                    file = temp;
+                }
+
                 changeExtension(file, ext);
+                word2.setText("Plik został zmieniony!");
             }
         });
     }
@@ -69,4 +92,6 @@ public class Main {
     public JComponent $$$getRootComponent$$$() {
         return main;
     }
+
+
 }
